@@ -29,22 +29,3 @@
     (set/intersection alphabet)
     (set/difference guesses)
     (empty?)))
-
-(comment
-  (let [word "hello, world!"
-        alphabet (set "abcdefghijklmnopqrstuvwxyz")]
-    (hide word alphabet)) 
-  (let [word "hello, world!"
-        alphabet (set "abcdefghijklmnopqrstuvwxyz")] 
-    (reveal word alphabet '#{\e \w}))
-  (let [word "hello"
-        guesses (set "tes")]
-    (wrong-guesses word guesses))
-  (let [word "hello"
-        guesses (set "tes")]
-    (right-guesses word guesses))
-  (let [word "hello"
-        guesses (set "heloz")
-        alphabet (set "abcdefghijklmnopqrstuvwxyz")]
-    (won? word alphabet guesses))
-)
