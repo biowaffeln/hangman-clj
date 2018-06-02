@@ -14,20 +14,20 @@
    letters revealed."
   (hide word (set/difference alphabet letters)))
 
-(defn wrong-letters [word letters]
+(defn wrong-guesses [word guesses]
   "Returns the set of wrongly guessed chars."
-  (set/difference letters (set word)))
+  (set/difference guesses (set word)))
 
-(defn right-letters [word letters]
+(defn right-guesses [word guesses]
   "Returns the set of correctly guessed chars."
-  (set/intersection (set word) letters))
+  (set/intersection (set word) guesses))
 
-(defn won? [word alphabet letters]
+(defn won? [word alphabet guesses]
   "Returns true if all the chars in the word have
    been guessed, otherwise returns false."
   (-> (set word)
     (set/intersection alphabet)
-    (set/difference letters)
+    (set/difference guesses)
     (empty?)))
 
 (comment
@@ -38,13 +38,13 @@
         alphabet (set "abcdefghijklmnopqrstuvwxyz")] 
     (reveal word alphabet '#{\e \w}))
   (let [word "hello"
-        letters (set "tes")]
-    (wrong-letters word letters))
+        guesses (set "tes")]
+    (wrong-guesses word guesses))
   (let [word "hello"
-        letters (set "tes")]
-    (right-letters word letters))
+        guesses (set "tes")]
+    (right-guesses word guesses))
   (let [word "hello"
-        letters (set "heloz")
+        guesses (set "heloz")
         alphabet (set "abcdefghijklmnopqrstuvwxyz")]
-    (won? word alphabet letters))
+    (won? word alphabet guesses))
 )
