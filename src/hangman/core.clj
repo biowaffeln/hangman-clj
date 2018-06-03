@@ -1,7 +1,8 @@
 (ns hangman.core
+  (:require [hangman.game])
   (:gen-class))
 
 (defn -main
-  "I don't do a whole lot ... yet."
+  "starts the game"
   [& args]
-  ())
+  (hangman.game/init-game))
