@@ -1,44 +1,42 @@
 (ns hangman.game
-  (:require [clojure.string :as str])
-  (:require [clojure.set :as set]))
+  (:require [hangman.words]))
 
-(defn hide
-  "Returns an obscured version of word, with all characters
-   in alphabet replaced with \\-."
-  [word alphabet]
-  (->> word
-       (map #(if (contains? alphabet %) \- %))
-       (str/join)))
+(defn print-game [word alphabet guesses]
+  (println (str "\nyour word: \n"
+                (reveal word alphabet guesses)
+                "        "
+                (count (wrong-guesses word guesses))
+                "/10  "
+                "wrong guesses: "
+                (wrong-guesses word guesses))))
 
-(defn reveal
-  "Applies hide to word, but with all charactes in
-   letters revealed."
-  [word alphabet letters]
-  (hide word (set/difference alphabet letters)))
+(defn sanitize-input [string]
+  (-> string seq first))
 
-(defn wrong-guesses
-  "Returns the set of wrongly guessed chars."
-  [word guesses]
-  (set/difference guesses (set word)))
+(defn game-loop [word alphabet guesses]
+  (if (won? word alphabet guesses)
+    (println "\nyou won! yay")
+    (if (lost? word guesses)
+      (println (str "\nyou lost! the word was " word))
+      (read-guess word alphabet guesses))))
 
-(defn right-guesses
-  "Returns the set of correctly guessed chars."
-  [word guesses]
-  (set/intersection (set word) guesses))
+(defn read-guess [word alphabet guesses]
+  (let [guess (read-line)
+        new-guesses (conj guesses (sanitize-input guess))]
+      (do
+       (print-game word alphabet new-guesses)
+       (game-loop word alphabet new-guesses))))
 
-(defn won?
-  "Returns true if all the chars in the word have
-   been guessed, otherwise returns false."
-  [word alphabet guesses]
-  (-> (set word)
-      (set/intersection alphabet)
-      (set/difference guesses)
-      (empty?)))
+(defn random-word []
+  (let [words ["functional programming",
+               "hello, world!",
+               "clojure"]]
+    (rand-nth words)))
 
-(defn lost? [word guesses]
-  (> (count (wrong-guesses word guesses))
-     10))
-
-(comment
-  (lost? "jazz" (set "etaoinshrdljc"))
-)
+(defn init-game []
+  (let [word (random-word)
+        alphabet (set "abcdefghijklmnopqrstuvwxyz")
+        guesses '#{}]
+    (do 
+      (print-game word alphabet guesses)
+      (game-loop word alphabet guesses))))

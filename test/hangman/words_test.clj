@@ -1,6 +1,6 @@
-(ns hangman.game-test
+(ns hangman.words-test
   (:require [clojure.test :refer :all]
-            [hangman.game :refer :all]))
+            [hangman.words :refer :all]))
 
 (let [alphabet 
       (set "abcdefghijklmnopqrstuvwxyz")]
