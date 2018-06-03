@@ -2,30 +2,35 @@
   (:require [clojure.string :as str])
   (:require [clojure.set :as set]))
 
-(defn hide [word alphabet]
+(defn hide
   "Returns an obscured version of word, with all characters
    in alphabet replaced with \\-."
-   (->> word
-    (map #(if (contains? alphabet %) \- %))
-    (str/join)))
+  [word alphabet]
+  (->> word
+       (map #(if (contains? alphabet %) \- %))
+       (str/join)))
 
-(defn reveal [word alphabet letters]
+(defn reveal
   "Applies hide to word, but with all charactes in
    letters revealed."
+  [word alphabet letters]
   (hide word (set/difference alphabet letters)))
 
-(defn wrong-guesses [word guesses]
+(defn wrong-guesses
   "Returns the set of wrongly guessed chars."
+  [word guesses]
   (set/difference guesses (set word)))
 
-(defn right-guesses [word guesses]
+(defn right-guesses
   "Returns the set of correctly guessed chars."
+  [word guesses]
   (set/intersection (set word) guesses))
 
-(defn won? [word alphabet guesses]
+(defn won?
   "Returns true if all the chars in the word have
    been guessed, otherwise returns false."
+  [word alphabet guesses]
   (-> (set word)
-    (set/intersection alphabet)
-    (set/difference guesses)
-    (empty?)))
+      (set/intersection alphabet)
+      (set/difference guesses)
+      (empty?)))
