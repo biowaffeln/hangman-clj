@@ -34,3 +34,11 @@
       (set/intersection alphabet)
       (set/difference guesses)
       (empty?)))
+
+(defn lost? [word guesses]
+  (> (count (wrong-guesses word guesses))
+     10))
+
+(comment
+  (lost? "jazz" (set "etaoinshrdljc"))
+)
