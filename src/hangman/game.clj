@@ -1,24 +1,17 @@
 (ns hangman.game
-  (:require [hangman.words]))
+  (:require [hangman.words :as words]))
 
 (defn print-game [word alphabet guesses]
   (println (str "\nyour word: \n"
-                (reveal word alphabet guesses)
+                (words/reveal word alphabet guesses)
                 "        "
-                (count (wrong-guesses word guesses))
+                (count (words/wrong-guesses word guesses))
                 "/10  "
                 "wrong guesses: "
-                (wrong-guesses word guesses))))
+                (words/wrong-guesses word guesses))))
 
 (defn sanitize-input [string]
   (-> string seq first))
-
-(defn game-loop [word alphabet guesses]
-  (if (won? word alphabet guesses)
-    (println "\nyou won! yay")
-    (if (lost? word guesses)
-      (println (str "\nyou lost! the word was " word))
-      (read-guess word alphabet guesses))))
 
 (defn read-guess [word alphabet guesses]
   (let [guess (read-line)
@@ -26,6 +19,13 @@
       (do
        (print-game word alphabet new-guesses)
        (game-loop word alphabet new-guesses))))
+
+(defn game-loop [word alphabet guesses]
+  (if (words/won? word alphabet guesses)
+    (println "\nyou won! yay")
+    (if (words/lost? word guesses)
+      (println (str "\nyou lost! the word was " word))
+      (read-guess word alphabet guesses))))
 
 (defn random-word []
   (let [words ["functional programming",
